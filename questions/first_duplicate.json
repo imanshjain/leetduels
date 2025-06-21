@@ -1,0 +1,17 @@
+{
+  "id": "1",
+  "title": "First Duplicate",
+  "difficulty": "easy",
+  "description": "Given an array of integers, return the first number that appears more than once. If there are no duplicates, return -1. The first duplicate is the one whose second occurrence has the smallest index.",
+  "input_spec": "List of integers (0 <= n <= 10^5)",
+  "output_spec": "Integer: the first duplicate, or -1 if none",
+  "examples": [
+    { "input": "[2, 5, 1, 2, 3, 5]", "output": "2" },
+    { "input": "[1, 2, 3, 4]", "output": "-1" }
+  ],
+  "test_cases": [
+    { "input": "[2, 2, 2]", "output": "2", "weight": 1 },
+    { "input": "[1]", "output": "-1", "weight": 1 },
+    { "input": "[3, 1, 4, 3, 5, 1]", "output": "3", "weight": 2 }
+  ]
+}
