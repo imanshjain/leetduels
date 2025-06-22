@@ -2,7 +2,7 @@ package server
 
 import (
 	"net/http"
-	"leetduel-backend/router/router"
+	"leetduel-backend/router"
 )
 
 func New() *http.Server {
