@@ -1,3 +1,5 @@
+package main
+
 import (
 	"context"
 	"fmt"
@@ -7,9 +9,9 @@ import (
 )
 
 // Initialize Firebase Admin SDK
-function initializeFirebase() (*auth.Client, error) {
+func initializeFirebase() (*auth.Client, error) {
 	ctx := context.Background()
-	opt := option.WithCredentialsFile("SECRETS/service-account-key.json")
+	opt := option.WithCredentialsFile("../SECRETS/service-account-key.json")
 	app, err := firebase.NewApp(ctx, nil, opt)
 	
 	if err != nil {
@@ -21,13 +23,11 @@ function initializeFirebase() (*auth.Client, error) {
 
 // Server is the main entry point for the server application.
 func main() {
-	authClient, err := initializeFirebase()
+	_, err := initializeFirebase()
 	if err != nil {
 		fmt.Println("Error initializing LeetDuel server:", err)
 		return
 	}
 
 	fmt.Println("Firebase Auth initialized.")
-
-	fmt.Printf("Fetched user: %v\n", user)
 }
