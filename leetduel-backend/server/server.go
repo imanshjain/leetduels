@@ -14,3 +14,6 @@ func New() *http.Server {
 		Handler: mux,
 	}
 }
+
+// constant for firebase secret key
+const SECRET string = "SECRETS/service-account-key.json"

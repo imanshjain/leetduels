@@ -13,7 +13,7 @@ import (
 // Initialize Firebase Admin SDK
 func initializeFirebase() (*auth.Client, error) {
 	ctx := context.Background()
-	opt := option.WithCredentialsFile("SECRETS/service-account-key.json")
+	opt := option.WithCredentialsFile(server.SECRET)
 	app, err := firebase.NewApp(ctx, nil, opt)
 	
 	if err != nil {
