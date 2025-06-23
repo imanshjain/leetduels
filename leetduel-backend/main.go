@@ -25,13 +25,14 @@ func initializeFirebase() (*auth.Client, error) {
 
 // Server is the main entry point for the server application.
 func main() {
-	s := server.New()
 
-	_, err := initializeFirebase()
+	authClient, err := initializeFirebase()
 	if err != nil {
 		fmt.Println("Error initializing LeetDuel server:", err)
 		return
 	}
+
+	s := server.New(authClient)
 
 	fmt.Println("Firebase Auth initialized.")
 
