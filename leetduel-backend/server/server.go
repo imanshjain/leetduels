@@ -1,8 +1,9 @@
 package server
 
 import (
-	"net/http"
 	"leetduel-backend/router"
+	"net/http"
+
 	"firebase.google.com/go/v4/auth"
 )
 
@@ -15,6 +16,3 @@ func New(authClient *auth.Client) *http.Server {
 		Handler: mux,
 	}
 }
-
-// constant for firebase secret key
-const SECRET string = "SECRETS/service-account-key.json"

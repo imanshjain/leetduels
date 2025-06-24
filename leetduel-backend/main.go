@@ -1,40 +1,38 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"firebase.google.com/go/v4"
-	"firebase.google.com/go/v4/auth"
-	"google.golang.org/api/option"
 	"log"
+
+	"github.com/lpernett/godotenv"
+
+	"leetduel-backend/db"
 	"leetduel-backend/server"
 )
 
-// Initialize Firebase Admin SDK
-func initializeFirebase() (*auth.Client, error) {
-	ctx := context.Background()
-	opt := option.WithCredentialsFile(server.SECRET)
-	app, err := firebase.NewApp(ctx, nil, opt)
-	
-	if err != nil {
-		return nil, fmt.Errorf("error initializing Firebase app: %v", err)
-	}
-
-	return app.Auth(ctx)
-}
-
-// Server is the main entry point for the server application.
 func main() {
-
-	authClient, err := initializeFirebase()
+	// Checking if the dot file loads correctly
+	err := godotenv.Load(".env")
 	if err != nil {
-		fmt.Println("Error initializing LeetDuel server:", err)
-		return
+		log.Fatal("❌ Error loading .env file")
 	}
 
-	s := server.New(authClient)
+	// Initiliaze pgql connection
+  dbPool, err := db.ConnectDB()
+	if err != nil {
+		log.Fatal("❌ Error connecting to pg")
+	}
+	defer dbPool.Close()
+	fmt.Println("PostgreSQL initialized.")
 
+	// Initilaize Firebase connection.
+	authClient, err := db.InitializeFirebase()
+	if err != nil {
+		log.Fatal("❌ Error initializing firebase")
+	}
 	fmt.Println("Firebase Auth initialized.")
 
+	// Create and run new server.
+	s := server.New(authClient)
 	log.Fatal(s.ListenAndServe())
 }
