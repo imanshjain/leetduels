@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: leetduel_postgres
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  backend:
+    build: ./leetduel-backend
+    container_name: leetduel_backend
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    environment: # Just taking the variables from .env file
+        DB_USER: ${DB_USER}
+        DB_PASSWORD: ${DB_PASSWORD}
+        DB_NAME: ${DB_NAME}
+        DB_HOST: postgres
+        DB_PORT: ${DB_PORT}
+        FIREBASE_SECRET_KEY: ${FIREBASE_SECRET_KEY}
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./leetduel-frontend
+    container_name: leetduel_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:
