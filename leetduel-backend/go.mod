@@ -4,6 +4,7 @@ go 1.24.4
 
 require (
 	firebase.google.com/go/v4 v4.16.1
+	github.com/gorilla/websocket v1.5.3
 	github.com/jackc/pgx/v5 v5.7.5
 	github.com/lpernett/godotenv v0.0.0-20230527005122-0de1d4c5ef5e
 	google.golang.org/api v0.238.0
