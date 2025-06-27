@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"encoding/json"
 	"log"
 	"time"
 
@@ -37,13 +38,18 @@ func (c *Client) readPump(){
 	})
 	
 	for {
-		_, message, err := c.conn.ReadMessage()
+		_, messageBytes, err := c.conn.ReadMessage()
     if err != nil {
 			log.Println(err)
 			return
     }
 		// The message is sent to hub who figures out what to do with it.
-    c.hub.broadcast <- message
+    var msg Message
+		if err := json.Unmarshal(messageBytes, &msg); err != nil {
+			log.Println("Invalid message:", err)
+			continue
+		}
+		c.hub.broadcast <- msg
 	}
 }
 
