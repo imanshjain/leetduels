@@ -1,6 +1,9 @@
 package ws
 
-import "fmt"
+import (
+	"fmt"
+	"leetduel-backend/matchmaking"
+)
 
 // This file contains code to keep track of everything.
 
@@ -28,6 +31,9 @@ type Hub struct {
 
 	// Map of uid to client
 	uidToClient map[string]*Client
+
+	// Matchmaking interface
+	matchmaking matchmaking.MatchMakingInterface
 }
 
 func newHub() *Hub {
