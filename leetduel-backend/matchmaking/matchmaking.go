@@ -10,25 +10,32 @@ const (
 	ELOBucketSize = 25
 )
 
-// Bucket represents a matchmaking bucket for players with similar ELO ratings.
-type Bucket struct {
-	Players []*models.User // List of players in the bucket
-}
-
 // matchmaking queue that holds buckets of players
 type MatchmakingQueue struct {
-	Buckets map[int]*Bucket // Map of ELO ratings to buckets
+	Buckets map[int]*models.User // Map of ELO ratings to players
 }
 
 func NewMatchmakingQueue() *MatchmakingQueue {
 
 	return &MatchmakingQueue{
-		Buckets: make(map[int]*Bucket),
+		Buckets: make(map[int]*models.User), // Initialize the map of buckets
 	}
 }
 
 func (mq *MatchmakingQueue) EnqueueOrGetRoom(player *models.User) *models.User {
-	return nil
+	// Get bucket based on player's ELO rating
+	bucketELO := player.Elo / ELOBucketSize
+	bucket, exists := mq.Buckets[bucketELO]
+	if !exists {
+		// Create a new bucket if it doesn't exist
+		mq.Buckets[bucketELO] = player
+
+		return nil // No match found, enqueue player
+	}
+
+	// If a player exists in the bucket, return that player as a match
+	delete(mq.Buckets, bucketELO) // Remove the matched player from the queue
+	return bucket                 // Return the matched player
 }
 
 type MatchMakingInterface interface {
