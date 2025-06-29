@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"net/http"
-	"math/rand"
 	"fmt"
+	"math/rand"
+	"net/http"
 )
 
 func GetRandomQuestion(w http.ResponseWriter, r *http.Request) {

@@ -24,17 +24,19 @@ func ServeWS(hub *Hub, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Step 2: Create a new client
+	// Step 2: authenticate the user
+
+	// Step 3: Create a new client
 	client := &Client{
 		hub:  hub,
 		conn: conn,
 		send: make(chan []byte, 256), // Buffered channel to avoid blocking
 	}
 
-	// Step 3: Register the client with the hub
+	// Step 4: Register the client with the hub
 	client.hub.register <- client
 
-	// Step 4: Start read and write goroutines
+	// Step 5: Start read and write goroutines
 	go client.writePump()
 	go client.readPump()
 }

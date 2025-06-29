@@ -23,7 +23,7 @@ type Room struct {
 }
 
 func generateRoomID() string {
-  return uuid.New().String()
+	return uuid.New().String()
 }
 
 func createNewRoom(p1 *Client, p2 *Client) *Room {
@@ -37,6 +37,6 @@ func createNewRoom(p1 *Client, p2 *Client) *Room {
 		Player2:   p2,
 		question:  que,
 		StartTime: now,
-		Timelimit:   &timelimit,
+		Timelimit: &timelimit,
 	}
 }

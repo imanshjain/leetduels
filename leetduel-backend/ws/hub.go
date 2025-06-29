@@ -25,34 +25,41 @@ type Hub struct {
 
 	// Unregister requests from clients.
 	unregister chan *Client
+
+	// Map of uid to client
+	uidToClient map[string]*Client
 }
 
 func newHub() *Hub {
 	return &Hub{
-		broadcast:  make(chan Message),
-		register:   make(chan *Client),
-		unregister: make(chan *Client),
-		clients:    make(map[*Client]bool),
+		broadcast:   make(chan Message),
+		register:    make(chan *Client),
+		unregister:  make(chan *Client),
+		clients:     make(map[*Client]bool),
+		rooms:       make(map[*Room]bool),
+		uidToClient: make(map[string]*Client),
 	}
 }
 
 func (hub *Hub) run() {
 	for {
 		select {
-			case client := <-hub.register:
-				hub.clients[client] = true
+		case client := <-hub.register:
+			hub.clients[client] = true
+			hub.uidToClient[client.User.Uid] = client // Map the client's UID to the client
 
-			case client := <-hub.unregister:
-				if _, ok := hub.clients[client]; ok {
-					delete(hub.clients, client)
-					close(client.send)
-				}
+		case client := <-hub.unregister:
+			if _, ok := hub.clients[client]; ok {
+				delete(hub.clients, client)
+				delete(hub.uidToClient, client.User.Uid) // Remove the client from the UID map
+				close(client.send)
+			}
 
-			case message := <-hub.broadcast:
-				// Send the message/code to the docker container to run the code with the tests.
-				fmt.Printf("Code to be run was received: %s\n", message)
-				handleMessage(message, hub)
+		case message := <-hub.broadcast:
+			// Send the message/code to the docker container to run the code with the tests.
+			fmt.Printf("Code to be run was received: %s\n", message)
+			handleMessage(message, hub)
+
 		}
 	}
 }
-

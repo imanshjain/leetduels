@@ -3,9 +3,8 @@ package ws
 import (
 	"encoding/json"
 	"fmt"
-	"log"
-
 	"leetduel-backend/models"
+	"log"
 )
 
 type Message struct {
@@ -20,10 +19,10 @@ type InboundMatchFound struct {
 
 // Sent to the players after room is created
 type OutboundMatchFound struct {
-	RoomID     string `json:"roomId"`
-	Question models.Question `json:"question"`
-	TimeLimit  int    `json:"timeLimit"`
-	Opponent   *string `json:"opponent"`
+	RoomID    string          `json:"roomId"`
+	Question  models.Question `json:"question"`
+	TimeLimit int             `json:"timeLimit"`
+	Opponent  *string         `json:"opponent"`
 }
 
 func mustMarshal(v any) json.RawMessage {
@@ -34,8 +33,8 @@ func mustMarshal(v any) json.RawMessage {
 	return b
 }
 
-func handleMessage(message Message, hub *Hub){
-	switch message.Type{
+func handleMessage(message Message, hub *Hub) {
+	switch message.Type {
 	// Calls function to send the question and other details
 	case "match_found":
 
@@ -49,32 +48,31 @@ func handleMessage(message Message, hub *Hub){
 		room := createNewRoom(payload.P1, payload.P2)
 
 		hub.rooms[room] = true
-		
+
 		var outboundMessage OutboundMatchFound = OutboundMatchFound{
-			RoomID: room.ID,
-			Question: *room.question,
+			RoomID:    room.ID,
+			Question:  *room.question,
 			TimeLimit: room.question.TimeLimit,
 		}
 
 		msg := Message{
 			Type:    "match_found",
 			Payload: mustMarshal(outboundMessage),
-    }
+		}
 
-    data, err := json.Marshal(msg)
-    if err != nil {
+		data, err := json.Marshal(msg)
+		if err != nil {
 			log.Println("Error marshaling match_found outbound message:", err)
 			return
-    }
+		}
 
-    room.Player1.send <- data
-    room.Player2.send <- data
-
+		room.Player1.send <- data
+		room.Player2.send <- data
 
 	case "code_submit":
-		// calls function to send the code to docker 
+		// calls function to send the code to docker
 	case "disconnect":
 		// closes the room and the websocket conneciton
-	
+
 	}
 }
