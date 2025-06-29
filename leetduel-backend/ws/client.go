@@ -38,17 +38,27 @@ func (c *Client) readPump(){
 	})
 	
 	for {
-		_, messageBytes, err := c.conn.ReadMessage()
+		_, rawMsg, err := c.conn.ReadMessage()
     if err != nil {
 			log.Println(err)
 			return
     }
 		// The message is sent to hub who figures out what to do with it.
-    var msg Message
-		if err := json.Unmarshal(messageBytes, &msg); err != nil {
-			log.Println("Invalid message:", err)
+    // var msg Message
+		// if err := json.Unmarshal(messageBytes, &msg); err != nil {
+		// 	log.Println("Invalid message:", err)
+		// 	continue
+		// }
+	
+		var msg Message
+		if err := json.Unmarshal(rawMsg, &msg); err != nil {
+			log.Println("invalid message format:", err)
 			continue
 		}
+
+		// Optionally attach the client info to the message if needed
+		msg.Sender = c // if you have Sender *Client field in Message
+
 		c.hub.broadcast <- msg
 	}
 }
@@ -86,4 +96,3 @@ func (c *Client) writePump(){
     }
 	}
 }
-

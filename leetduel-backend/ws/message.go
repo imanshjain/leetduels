@@ -2,15 +2,16 @@ package ws
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"leetduel-backend/models"
 )
 
 type Message struct {
+	Sender  *Client					`json:"sender"`
 	Type    string          `json:"type"`
-	Payload json.RawMessage `json:"payload"`
+	Target  string          `json:"target"`
+	Payload json.RawMessage	`json:"payload"`
 }
 
 type InboundMatchFound struct {
@@ -37,16 +38,20 @@ func mustMarshal(v any) json.RawMessage {
 func handleMessage(message Message, hub *Hub){
 	switch message.Type{
 	// Calls function to send the question and other details
-	case "match_found":
+	case "find_match":
 
-		// Unmarshal the []bytes into a struct to use p1 and p2
-		var payload InboundMatchFound
-		if err := json.Unmarshal(message.Payload, &payload); err != nil {
-			fmt.Println("Error unmarshaling match_found inbound payload:", err)
-			return
+		// TODO: Call the find players functions here.
+		// TODO: Remove this
+		dummyClient := &Client{
+			conn: nil,                // no real WebSocket for now
+			send: make(chan []byte), // just a dummy channel
+			hub:  hub,    // pass the hub you're using
 		}
 
-		room := createNewRoom(payload.P1, payload.P2)
+		P1 := dummyClient
+		P2 := dummyClient
+
+		room := createNewRoom(P1, P2)
 
 		hub.rooms[room] = true
 		

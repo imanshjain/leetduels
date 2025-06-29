@@ -1,7 +1,5 @@
 package ws
 
-import "fmt"
-
 // This file contains code to keep track of everything.
 
 // Responsibilities:
@@ -27,7 +25,7 @@ type Hub struct {
 	unregister chan *Client
 }
 
-func newHub() *Hub {
+func NewHub() *Hub {
 	return &Hub{
 		broadcast:  make(chan Message),
 		register:   make(chan *Client),
@@ -36,7 +34,7 @@ func newHub() *Hub {
 	}
 }
 
-func (hub *Hub) run() {
+func (hub *Hub) Run() {
 	for {
 		select {
 			case client := <-hub.register:
@@ -48,11 +46,11 @@ func (hub *Hub) run() {
 					close(client.send)
 				}
 
-			case message := <-hub.broadcast:
+			case clientMsg := <-hub.broadcast:
 				// Send the message/code to the docker container to run the code with the tests.
-				fmt.Printf("Code to be run was received: %s\n", message)
-				handleMessage(message, hub)
+				// fmt.Printf("Code to be run was received: %s\n", message)
+				handleMessage(clientMsg, hub)
+				// handleMessage(message, hub)
 		}
 	}
 }
-
