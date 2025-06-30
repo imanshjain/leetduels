@@ -4,12 +4,12 @@ import (
 	"leetduel-backend/router"
 	"net/http"
 
-	"firebase.google.com/go/v4/auth"
+	"leetduel-backend/controller"
 )
 
-func New(authClient *auth.Client) *http.Server {
+func New(a_ctx *controller.AppContext) *http.Server {
 	mux := http.NewServeMux()
-	router.RegisterRoutes(mux, authClient)
+	router.RegisterRoutes(a_ctx, mux)
 
 	return &http.Server{
 		Addr:    ":8080",

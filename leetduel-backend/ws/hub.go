@@ -36,7 +36,7 @@ type Hub struct {
 	matchmaking matchmaking.MatchMakingInterface
 }
 
-func newHub() *Hub {
+func NewHub() *Hub {
 	return &Hub{
 		broadcast:   make(chan Message),
 		register:    make(chan *Client),
@@ -47,7 +47,10 @@ func newHub() *Hub {
 	}
 }
 
-func (hub *Hub) run() {
+func (hub *Hub) Run() {
+
+	fmt.Println("WebSocket hub is running...")
+
 	for {
 		select {
 		case client := <-hub.register:
