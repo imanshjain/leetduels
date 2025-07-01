@@ -18,6 +18,15 @@ type Client struct {
 	User *models.User // User information associated with the client
 }
 
+func NewClient(conn *websocket.Conn, hub *Hub, user *models.User) *Client {
+	return &Client{
+		conn: conn,
+		send: make(chan []byte, 256), // Buffered channel to avoid blocking
+		hub:  hub,
+		User: user, // Associate the user with the client
+	}
+}
+
 const (
 	pongWait   = 60 * time.Second    // How long to wait before a pong is received
 	pingPeriod = (pongWait * 9) / 10 // Send a ping every pingPeriod seconds

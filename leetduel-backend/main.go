@@ -34,7 +34,7 @@ func main() {
 	go hub.Run()
 
 	// Initialize AppContext with auth client and hub.
-	a_ctx := controller.NewAppContext(authClient, hub)
+	a_ctx := controller.NewAppContext(authClient, hub, dbPool)
 
 	// Create and run new server.
 	s := server.New(a_ctx)

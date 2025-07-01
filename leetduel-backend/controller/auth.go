@@ -3,6 +3,7 @@ package controller
 import (
 	"context"
 	"fmt"
+	"leetduel-backend/utils"
 	"net/http"
 
 	"firebase.google.com/go/v4/auth"
@@ -37,7 +38,7 @@ func (a_ctx *AppContext) AuthMiddleware(next http.HandlerFunc) http.HandlerFunc 
 		}
 
 		// Store the user ID in the request context for further processing
-		newCtx := context.WithValue(r.Context(), authKey, token)
+		newCtx := context.WithValue(r.Context(), utils.AuthKey, token)
 		r = r.WithContext(newCtx)
 
 		next(w, r)
@@ -47,7 +48,7 @@ func (a_ctx *AppContext) AuthMiddleware(next http.HandlerFunc) http.HandlerFunc 
 func GetUser(w http.ResponseWriter, r *http.Request) {
 
 	// Retrieve the token from the request context
-	token, ok := r.Context().Value(authKey).(*auth.Token)
+	token, ok := r.Context().Value(utils.AuthKey).(*auth.Token)
 
 	if !ok || token == nil {
 		http.Error(w, "Unauthorized: Invalid token", http.StatusUnauthorized)

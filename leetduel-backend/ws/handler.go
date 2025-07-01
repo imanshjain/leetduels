@@ -1,6 +1,8 @@
 package ws
 
 import (
+	"leetduel-backend/models"
+	"leetduel-backend/utils"
 	"log"
 	"net/http"
 
@@ -16,27 +18,30 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-func ServeWS(hub *Hub, w http.ResponseWriter, r *http.Request) {
+func ServeWS(w http.ResponseWriter, r *http.Request) error {
 	// Step 1: Upgrade HTTP connection to WebSocket
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println("Failed to upgrade to websocket:", err)
-		return
+		return err
 	}
 
-	// Step 2: authenticate the user
+	// Step 2: Create a new client
+	hub, ok_h := r.Context().Value(utils.HubKey).(*Hub)
+	user, ok_u := r.Context().Value(utils.UserKey).(*models.User)
 
-	// Step 3: Create a new client
-	client := &Client{
-		hub:  hub,
-		conn: conn,
-		send: make(chan []byte, 256), // Buffered channel to avoid blocking
+	if !ok_h || !ok_u || hub == nil || user == nil {
+		log.Println("Hub or user context is missing")
 	}
 
-	// Step 4: Register the client with the hub
+	client := NewClient(conn, hub, user)
+
+	// Step 3: Register the client with the hub
 	client.hub.register <- client
 
-	// Step 5: Start read and write goroutines
+	// Step 4: Start read and write goroutines
 	go client.writePump()
 	go client.readPump()
+
+	return nil
 }
