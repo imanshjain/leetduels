@@ -13,7 +13,7 @@ services:
       - "${DB_PORT}:${DB_PORT}"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./leetduel-backend/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
 
   backend:
     build: ./leetduel-backend
@@ -23,12 +23,12 @@ services:
     env_file:
       - .env
     environment: # Just taking the variables from .env file
-        DB_USER: ${DB_USER}
-        DB_PASSWORD: ${DB_PASSWORD}
-        DB_NAME: ${DB_NAME}
-        DB_HOST: postgres
-        DB_PORT: ${DB_PORT}
-        FIREBASE_SECRET_KEY: ${FIREBASE_SECRET_KEY}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: postgres
+      DB_PORT: ${DB_PORT}
+      FIREBASE_SECRET_KEY: ${FIREBASE_SECRET_KEY}
     ports:
       - "8080:8080"
 

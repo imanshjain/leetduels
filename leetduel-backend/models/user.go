@@ -22,7 +22,7 @@ func GetUser(ctx context.Context, token *auth.Token, dbpool *pgxpool.Pool) (*Use
 	// Get row from database
 	row := dbpool.QueryRow(
 		ctx,
-		"SELECT uid, firebase_uid, username, elo FROM users WHERE firebase_uid = $1",
+		"SELECT id, firebase_uid, username, elo FROM users WHERE firebase_uid = $1",
 		token.UID,
 	)
 

@@ -40,7 +40,7 @@ func (a_ctx *AppContext) ChainMiddleware(handler http.HandlerFunc, middlewares .
 
 // dbMiddleWare injects the database connection pool into the request context
 // Add further proessing here to pool if needed.
-func (a_ctx *AppContext) dbMiddleware(next http.HandlerFunc) http.HandlerFunc {
+func (a_ctx *AppContext) DBMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Store the database connection pool in the request context
 		newCtx := context.WithValue(r.Context(), utils.DbKey, a_ctx.Pgx)
@@ -52,7 +52,7 @@ func (a_ctx *AppContext) dbMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 // hubMiddleware injects the WebSocket hub into the request context
 // Add further processing here to hub if needed.
-func (a_ctx *AppContext) hubMiddleware(next http.HandlerFunc) http.HandlerFunc {
+func (a_ctx *AppContext) HubMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Store the WebSocket hub in the request context
 		newCtx := context.WithValue(r.Context(), utils.HubKey, a_ctx.Hub)
