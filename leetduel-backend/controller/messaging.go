@@ -27,8 +27,6 @@ func InitMessage(w http.ResponseWriter, r *http.Request) {
 
 	user, err := models.GetUser(ctx, token, db)
 
-	log.Printf("error: %v", err)
-
 	if err != nil {
 		http.Error(w, "Failed to get user for token", http.StatusInternalServerError)
 		return

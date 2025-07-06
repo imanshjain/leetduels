@@ -25,10 +25,15 @@ func (a_ctx *AppContext) AuthMiddleware(next http.HandlerFunc) http.HandlerFunc 
 
 		fmt.Println("AuthMiddleware called")
 
+		// Use Auth header with HTTP, Query with WebSocket. Use WSS for encrypting the ID token.
 		idToken := r.Header.Get("Authorization")
 		if idToken == "" {
-			http.Error(w, "Authorization header is missing", http.StatusUnauthorized)
-			return
+			idToken = r.URL.Query().Get("idToken")
+
+			if idToken == "" {
+				http.Error(w, "Unauthorized: ID token is missing", http.StatusUnauthorized)
+				return
+			}
 		}
 
 		token, err := verifyIDToken(a_ctx.AuthClient, ctx, idToken)

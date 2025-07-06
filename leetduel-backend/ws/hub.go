@@ -3,6 +3,7 @@ package ws
 import (
 	"fmt"
 	"leetduel-backend/matchmaking"
+	"log"
 )
 
 // This file contains code to keep track of everything.
@@ -54,6 +55,7 @@ func (hub *Hub) Run() {
 	for {
 		select {
 		case client := <-hub.register:
+			log.Printf("Client registered: %s\n", client.User.Uid)
 			hub.clients[client] = true
 			hub.uidToClient[client.User.Uid] = client // Map the client's UID to the client
 
