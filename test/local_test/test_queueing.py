@@ -12,4 +12,5 @@ def test_init_message(get_session, get_ws):
     response = get_ws.recv()
     data = json.loads(response)
 
-    assert "message" in data, "Response should contain a message"
+    payload = data.get("payload", {})
+    assert payload.get("message") == "Welcome to LeetDuel!"

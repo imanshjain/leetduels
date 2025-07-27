@@ -59,6 +59,16 @@ func (hub *Hub) Run() {
 			hub.clients[client] = true
 			hub.uidToClient[client.User.Uid] = client // Map the client's UID to the client
 
+			// Write a welcome message to the client
+			welcomeMessage := Message{
+				Type: "welcome",
+				Payload: mustMarshal(map[string]string{
+					"message": "Welcome to LeetDuel!",
+				}),
+			}
+
+			client.send <- mustMarshal(welcomeMessage)
+
 		case client := <-hub.unregister:
 			if _, ok := hub.clients[client]; ok {
 				delete(hub.clients, client)

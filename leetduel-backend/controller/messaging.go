@@ -18,7 +18,7 @@ func InitMessage(w http.ResponseWriter, r *http.Request) {
 	token, ok_t := r.Context().Value(utils.AuthKey).(*auth.Token)
 	db, ok_d := r.Context().Value(utils.DbKey).(*pgxpool.Pool)
 
-	log.Printf("InitMessage called with token: %v, db: %v", ok_t, ok_d)
+	log.Printf("InitMessage called with token: %s, db: %v", token.UID, db != nil)
 
 	if !ok_t || !ok_d || token == nil || db == nil {
 		http.Error(w, "Unauthorized: Invalid token or context", http.StatusUnauthorized)
