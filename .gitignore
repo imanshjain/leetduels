@@ -1,2 +1,5 @@
 SECRETS/
 .env
+test/local_test/__pycache__/conftest.cpython-310-pytest-6.2.5.pyc
+test/local_test/__pycache__/test_auth.cpython-310-pytest-6.2.5.pyc
+test/local_test/__pycache__/test_queueing.cpython-310-pytest-6.2.5.pyc

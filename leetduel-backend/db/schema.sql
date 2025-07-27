@@ -25,3 +25,7 @@ CREATE TABLE test_cases (
   input TEXT NOT NULL,
   expected_output TEXT NOT NULL
 );
+
+-- DEBUG: Queries for testing purposes
+INSERT INTO users (firebase_uid, username, elo) VALUES
+('VJwOXkiIcYXQSn4Tp0rHj1SwLg83', 'test_user1', 500);

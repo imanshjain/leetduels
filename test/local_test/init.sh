@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cd ../../
 
 # First compose down if it exists
@@ -9,6 +11,7 @@ docker compose build
 docker compose up -d
 
 # ... (TODO) add tests and commands to run them
+pytest-3
 
 # terminate
-docker compose down
+# docker compose down
